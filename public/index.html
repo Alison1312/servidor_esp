@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel do Portão</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #111, #333);
+      color: #fff;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #000;
+      width: 320px;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #08c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .status {
+      margin-top: 15px;
+      font-size: 18px;
+    }
+  </style>
+  <script>
+    function acionar() {
+      fetch('/abrir').then(r => r.text()).then(alert);
+    }
+    function statusPortao() {
+      fetch('/status').then(r => r.text()).then(text => {
+        document.getElementById('status').textContent = 'Status: ' + text;
+      });
+    }
+    function modoCadastro() {
+      const senha = prompt('Digite a senha de cadastro:');
+      if (senha) {
+        fetch('/modo_cadastro?senha=' + senha).then(r => r.text()).then(alert);
+      }
+    }
+    setInterval(statusPortao, 5000);
+    window.onload = statusPortao;
+  </script>
+<body>
+    <div class="container">
+        <h1>Portão</h1>
+        <h1>Casa Ramires</h1>
+        <div class="status-box">
+            Status do Portão: <span id="gateStatus" class="status-unknown">Desconhecido</span>
+        </div>
+
+        <div class="buttons-grid">
+            <button id="btnAbrir">Abrir/Fechar/Parar</button>
+            <button id="btnLigarLuz">Ligar/Desligar Luz</button>
+            <button id="btnCadastrarControle">Cadastrar Controle</button>
+            <button id="btnAprenderTrajeto">Aprender Trajeto</button>
+        </div>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
 
